@@ -206,6 +206,20 @@ exports.LoadUtils = () => {
             delete options.location;
         }
 
+        let _pollOptions = {};
+        if (options.poll) {
+            const { pollName, pollOptions } = options.poll;
+            const { allowMultipleAnswers } = options.poll.options;
+            _pollOptions = {
+                type: 'poll_creation',
+                pollName: pollName,
+                pollOptions: pollOptions,
+                pollSelectableOptionsCount: allowMultipleAnswers ? 0 : 1,
+                messageSecret: window.crypto.getRandomValues(new Uint8Array(32))
+            };
+            delete options.poll;
+        }
+
         let vcardOptions = {};
         if (options.contactCard) {
             let contact = window.Store.Contact.get(options.contactCard);
@@ -325,6 +339,7 @@ exports.LoadUtils = () => {
             type: 'chat',
             ...ephemeralFields,
             ...locationOptions,
+            ..._pollOptions,
             ...attOptions,
             ...(attOptions.toJSON ? attOptions.toJSON() : {}),
             ...quotedMsgOptions,
