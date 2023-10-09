@@ -5,7 +5,6 @@
  * @typedef {Object} PollSendOptions
  * @property {boolean} [allowMultipleAnswers=false] If false it is a single choice poll, otherwise it is a multiple choice poll (false by default)
  */
-
 /** Represents a Poll on WhatsApp */
 class Poll {
     /**
