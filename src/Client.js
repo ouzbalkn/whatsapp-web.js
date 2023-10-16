@@ -679,13 +679,6 @@ class Client extends EventEmitter {
 
         await page.evaluate(() => {
             window.Store.Msg.on('change', (msg) => { window.onChangeMessageEvent(window.WWebJS.getMessageModel(msg)); });
-            if(msg.type === 'ciphertext') {
-                // defer message event until ciphertext is resolved (type changed)
-                msg.once('change:type', (_msg) => window.onAddMessageEvent(window.WWebJS.getMessageModel(_msg)));
-                window.onAddMessageCiphertextEvent(window.WWebJS.getMessageModel(msg));
-            } else {
-                window.onAddMessageEvent(window.WWebJS.getMessageModel(msg)); 
-            }
             window.Store.Msg.on('change:type', (msg) => { window.onChangeMessageTypeEvent(window.WWebJS.getMessageModel(msg)); });
             window.Store.Msg.on('change:ack', (msg, ack) => { window.onMessageAckEvent(window.WWebJS.getMessageModel(msg), ack); });
             window.Store.Msg.on('change:isUnsentMedia', (msg, unsent) => { if (msg.id.fromMe && !unsent) window.onMessageMediaUploadedEvent(window.WWebJS.getMessageModel(msg)); });
